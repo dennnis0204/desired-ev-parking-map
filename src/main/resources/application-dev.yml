@@ -1,0 +1,52 @@
+spring:
+
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driverClassName: org.h2.Driver
+    username: sa
+    password:
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+      naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
+      databaseplatform: org.hibernate.dialect.H2Dialect
+
+    show-sql: true
+
+  h2:
+    console:
+      enabled: true
+
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 348222306770-m13i309jtilnddv811htakvqp1g3lrvc.apps.googleusercontent.com
+            client-secret: FsTMT3OYv0aY3vIX-VXuLB_A
+            scope:
+              - openid
+              - email
+              - profile
+          facebook:
+            client-id: 678929842802656
+            client-secret: af5608edcb4b42e9b723e12d3f8e99ba
+            scope:
+              - email
+              - public_profile
+
+server:
+  servlet:
+    session:
+      persistent: false
+
+logging:
+  level:
+    root: INFO
+    org.springframework.web: INFO
+    org.springframework.security: INFO
+
+settings:
+  user:
+    maxPointsNumber: 2

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html
+  lang="en"
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:th="https://www.thymeleaf.org"
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+    />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <script type="text/javascript">
+      if (window.location.hash && window.location.hash == "#_=_") {
+        if (window.history && history.pushState) {
+          window.history.pushState(
+            "",
+            document.title,
+            window.location.pathname
+          );
+        } else {
+          // Prevent scrolling by storing the page's current scroll offset
+          var scroll = {
+            top: document.body.scrollTop,
+            left: document.body.scrollLeft,
+          };
+          window.location.hash = "";
+          // Restore the scroll offset, should be flicker free
+          document.body.scrollTop = scroll.top;
+          document.body.scrollLeft = scroll.left;
+        }
+      }
+    </script>
+
+    <title>Green Parking Login</title>
+  </head>
+  <body>
+    <h1>Green Parking Login Page</h1>
+    <div th:if="${session.SPRING_SECURITY_LAST_EXCEPTION != null }">
+      <p
+        th:if="${#strings.containsIgnoreCase(session.SPRING_SECURITY_LAST_EXCEPTION.getMessage(), 'google')}"
+      >
+        Looks like you are signed up with google account. Please use your google account to login
+      </p>
+      <p
+        th:if="${#strings.containsIgnoreCase(session.SPRING_SECURITY_LAST_EXCEPTION.getMessage(), 'facebook')}"
+      >
+        Looks like you are signed up with facebook account. Please use your facebook account to login
+      </p>
+    </div>
+    <div>
+      <a href="/oauth2/authorization/google">Google</a>
+    </div>
+    <div>
+      <a href="/oauth2/authorization/facebook">Facebook</a>
+    </div>
+  </body>
+</html>
