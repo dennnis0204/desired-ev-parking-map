@@ -32,6 +32,7 @@ public class UserMapperTest {
     @BeforeAll()
     public void init() {
         log.info("startup");
+        log.info("startup");
         user = new User();
         user.setName("Jim");
         user.setEmail("jim@gmail.com");

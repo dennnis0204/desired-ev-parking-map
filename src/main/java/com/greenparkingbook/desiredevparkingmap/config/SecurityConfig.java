@@ -4,6 +4,7 @@ import com.greenparkingbook.desiredevparkingmap.security.CustomUserDetailsServic
 import com.greenparkingbook.desiredevparkingmap.security.RestAuthenticationEntryPoint;
 import com.greenparkingbook.desiredevparkingmap.security.oauth2.CustomOAuth2UserService;
 import com.greenparkingbook.desiredevparkingmap.security.oauth2.CustomOidcUserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -15,17 +16,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final CustomUserDetailsService customUserDetailsService;
     private final CustomOAuth2UserService customOAuth2UserService;
     private final CustomOidcUserService customOidcUserService;
-
-    public SecurityConfig(CustomUserDetailsService customUserDetailsService, CustomOAuth2UserService customOAuth2UserService, CustomOidcUserService customOidcUserService) {
-        this.customUserDetailsService = customUserDetailsService;
-        this.customOAuth2UserService = customOAuth2UserService;
-        this.customOidcUserService = customOidcUserService;
-    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -42,6 +38,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
+                .csrf()
+                .disable()
+
+                .headers()
+                .disable()
+
                 .httpBasic()
                 .disable()
 
@@ -52,6 +54,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/",
                         "/h2-console/**",
+                        "/api/cities",
                         "/login",
                         "/error",
                         "/favicon.ico",

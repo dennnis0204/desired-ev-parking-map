@@ -4,18 +4,16 @@ import com.greenparkingbook.desiredevparkingmap.dto.ChargingPointDto;
 import com.greenparkingbook.desiredevparkingmap.dto.UserPointsDto;
 import com.greenparkingbook.desiredevparkingmap.security.UserPrincipal;
 import com.greenparkingbook.desiredevparkingmap.service.UserServiceImpl;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api")
+@RequiredArgsConstructor
 public class ChargingPointRestController {
 
     private final UserServiceImpl userService;
-
-    public ChargingPointRestController(UserServiceImpl userService) {
-        this.userService = userService;
-    }
 
     @GetMapping("/points")
     public UserPointsDto getUserPoints(@AuthenticationPrincipal UserPrincipal userPrincipal) {
