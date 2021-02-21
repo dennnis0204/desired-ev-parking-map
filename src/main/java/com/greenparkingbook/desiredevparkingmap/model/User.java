@@ -1,5 +1,6 @@
 package com.greenparkingbook.desiredevparkingmap.model;
 
+import com.greenparkingbook.desiredevparkingmap.exception.ChargingPointDoesNotExist;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -7,10 +8,11 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Data
 @Entity
-@Table(name="users", uniqueConstraints = {@UniqueConstraint(columnNames = "email")})
+@Table(name = "users", uniqueConstraints = {@UniqueConstraint(columnNames = "email")})
 public class User {
 
     @Id
@@ -32,7 +34,7 @@ public class User {
     @Enumerated(EnumType.STRING)
     private AuthProvider provider;
 
-    @Column(name="provider_id")
+    @Column(name = "provider_id")
     private String providerId;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -46,5 +48,24 @@ public class User {
     public void removeChargingPoint(ChargingPoint chargingPoint) {
         chargingPoints.remove(chargingPoint);
         chargingPoint.setUser(null);
+    }
+
+    public void updateChargingPoint(ChargingPoint newChargingPoint) {
+        Long id = newChargingPoint.getId();
+
+        if (findChargingPointById(id).isPresent()) {
+            removeChargingPoint(findChargingPointById(id).get());
+            addChargingPoint(newChargingPoint);
+        } else {
+            throw new ChargingPointDoesNotExist(
+                    String.format("User have no point with id = %s", id));
+        }
+    }
+
+    public Optional<ChargingPoint> findChargingPointById(Long id) {
+        Optional<ChargingPoint> chargingPointOptional = chargingPoints.stream()
+                .filter(point -> point.getId() == id)
+                .findFirst();
+        return chargingPointOptional;
     }
 }

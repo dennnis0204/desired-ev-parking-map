@@ -31,4 +31,10 @@ public class ChargingPointRestController {
         userService.deleteUserPoint(userPrincipal.getEmail(), chargingPointDto);
         return userService.getUserPoints(userPrincipal.getEmail());
     }
+
+    @PutMapping("/points")
+    public UserPointsDto updateUserPoint(@RequestBody ChargingPointDto chargingPointDto, @AuthenticationPrincipal UserPrincipal userPrincipal) {
+        userService.updateUserPoint(userPrincipal.getEmail(), chargingPointDto);
+        return userService.getUserPoints(userPrincipal.getEmail());
+    }
 }

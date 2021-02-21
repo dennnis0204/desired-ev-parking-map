@@ -4,7 +4,6 @@ import lombok.Data;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.math.BigDecimal;
 import java.util.Objects;
 
 @Data
@@ -25,11 +24,11 @@ public class ChargingPoint {
 
     @NotNull(message = "latitude is mandatory")
     @Column(precision = 4, scale = 2)
-    private BigDecimal latitude;
+    private Float latitude;
 
     @NotNull(message = "longitude is mandatory")
     @Column(precision = 4, scale = 2)
-    private BigDecimal longitude;
+    private Float longitude;
 
     @ManyToOne(cascade= {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
     @JoinColumn(name="user_id")
@@ -40,11 +39,15 @@ public class ChargingPoint {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ChargingPoint that = (ChargingPoint) o;
-        return Objects.equals(id, that.id);
+        return id.equals(that.id) &&
+                typeOfCurrent.equals(that.typeOfCurrent) &&
+                power.equals(that.power) &&
+                latitude.equals(that.latitude) &&
+                longitude.equals(that.longitude);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(id, typeOfCurrent, power, latitude, longitude);
     }
 }

@@ -14,8 +14,8 @@ import java.util.stream.Collectors;
 public class GlobalControllerExceptionHandler {
 
     @ExceptionHandler(UserMaxPointsNumberExceeded.class)
-    public ResponseEntity<String> handleUserMaxPointsNumberExceeded() {
-        return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
+    public ResponseEntity<String> handleUserMaxPointsNumberExceeded(UserMaxPointsNumberExceeded ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(ChargingPointDoesNotExist.class)

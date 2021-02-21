@@ -7,6 +7,7 @@ import com.greenparkingbook.desiredevparkingmap.model.ChargingPoint;
 import com.greenparkingbook.desiredevparkingmap.model.User;
 import com.greenparkingbook.desiredevparkingmap.repository.ChargingPointRepository;
 import com.greenparkingbook.desiredevparkingmap.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -16,9 +17,11 @@ import javax.transaction.Transactional;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import javax.validation.Validator;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
     @Value("${settings.user.maxPointsNumber}")
@@ -31,17 +34,6 @@ public class UserServiceImpl implements UserService {
     private final ChargingPointMapper chargingPointMapper;
     private final EntityManager entityManager;
     private final Validator validator;
-
-
-    public UserServiceImpl(UserRepository userRepository, ChargingPointRepository chargingPointRepository, UserMapper userMapper, UserPointsMapper userPointsMapper, ChargingPointMapper chargingPointMapper, EntityManager entityManager, Validator validator) {
-        this.userRepository = userRepository;
-        this.chargingPointRepository = chargingPointRepository;
-        this.userMapper = userMapper;
-        this.userPointsMapper = userPointsMapper;
-        this.chargingPointMapper = chargingPointMapper;
-        this.entityManager = entityManager;
-        this.validator = validator;
-    }
 
     @Override
     public UserDto getUser(String email) {
@@ -75,16 +67,26 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteUserPoint(String email, ChargingPointDto chargingPointDto) {
         User user = getUserByEmail(email);
-        ChargingPoint chargingPoint = chargingPointMapper.chargingPointDtoToChargingPoint(chargingPointDto);
-        Set<ConstraintViolation<ChargingPoint>> constraintViolations = validator.validate(chargingPoint);
-        if (constraintViolations.size() > 0) {
-            throw new ConstraintViolationException(constraintViolations);
-        }
-        if (chargingPointRepository.existsChargingPointById(chargingPoint.getId())) {
+        ChargingPoint chargingPoint = mapValidatePoint(chargingPointDto);
+        Optional<ChargingPoint> chargingPointById = user.findChargingPointById(chargingPoint.getId());
+        if (chargingPointById.isPresent() && chargingPointById.get().equals(chargingPoint)) {
             user.removeChargingPoint(chargingPoint);
             userRepository.save(user);
         } else {
-            throw new ChargingPointDoesNotExist(String.format("Point with id %d does not exist on the map", chargingPoint.getId()));
+            throw new ChargingPointDoesNotExist("User has no such point!");
+        }
+    }
+
+    @Override
+    public void updateUserPoint(String email, ChargingPointDto chargingPointDto) {
+        User user = getUserByEmail(email);
+        ChargingPoint chargingPoint = mapValidatePoint(chargingPointDto);
+        if (user.findChargingPointById(chargingPoint.getId()).isPresent()) {
+            user.updateChargingPoint(chargingPoint);
+            userRepository.save(user);
+        } else {
+            throw new ChargingPointDoesNotExist(
+                    String.format("User has no point with id = %s!", chargingPoint.getId()));
         }
     }
 
@@ -92,5 +94,14 @@ public class UserServiceImpl implements UserService {
     public User getUserByEmail(String email) {
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with email : " + email));
+    }
+
+    private ChargingPoint mapValidatePoint(ChargingPointDto chargingPointDto) {
+        ChargingPoint chargingPoint = chargingPointMapper.chargingPointDtoToChargingPoint(chargingPointDto);
+        Set<ConstraintViolation<ChargingPoint>> constraintViolations = validator.validate(chargingPoint);
+        if (constraintViolations.size() > 0) {
+            throw new ConstraintViolationException(constraintViolations);
+        }
+        return chargingPoint;
     }
 }
