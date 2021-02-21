@@ -32,21 +32,35 @@ public class UserMapperTest {
     @BeforeAll()
     public void init() {
         log.info("startup");
-        log.info("startup");
+
         user = new User();
         user.setName("Jim");
         user.setEmail("jim@gmail.com");
         user.setProvider(AuthProvider.google);
+
         firstPoint = new ChargingPoint();
+        firstPoint.setId(1L);
         firstPoint.setPower("3-5 kW");
         firstPoint.setTypeOfCurrent("AC");
+        firstPoint.setLatitude(33.33F);
+        firstPoint.setLongitude(44.44F);
+
         secondPoint = new ChargingPoint();
+        secondPoint.setId(2L);
         secondPoint.setTypeOfCurrent("DC");
         secondPoint.setPower("6-15 kW");
+        secondPoint.setLatitude(88.88F);
+        secondPoint.setLongitude(77.77F);
+
         user.setChargingPoints(List.of(firstPoint, secondPoint));
+
         chargingPointDto = new ChargingPointDto();
+        chargingPointDto.setId(1L);
         chargingPointDto.setPower("3-5 kW");
         chargingPointDto.setTypeOfCurrent("AC");
+        chargingPointDto.setLatitude(33.33F);
+        chargingPointDto.setLongitude(44.44F);
+
     }
 
     @AfterAll
@@ -74,5 +88,6 @@ public class UserMapperTest {
         ChargingPoint chargingPoint = chargingPointMapper.chargingPointDtoToChargingPoint(chargingPointDto);
         assertThat(chargingPoint.getPower()).isEqualTo(chargingPointDto.getPower());
         assertThat(chargingPoint.getTypeOfCurrent()).isEqualTo(chargingPointDto.getTypeOfCurrent());
+        assertThat(firstPoint).isEqualTo(chargingPoint);
     }
 }
