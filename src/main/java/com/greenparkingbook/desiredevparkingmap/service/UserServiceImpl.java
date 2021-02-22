@@ -53,7 +53,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public void addUserPoint(String email, ChargingPointDto chargingPointDto) {
         User user = getUserByEmail(email);
-        ChargingPoint chargingPoint = chargingPointMapper.chargingPointDtoToChargingPoint(chargingPointDto);
+        ChargingPoint chargingPoint = mapValidatePoint(chargingPointDto);
 
         if (user.getChargingPoints().size() < userMaxPointsNumber) {
             user.addChargingPoint(chargingPoint);
