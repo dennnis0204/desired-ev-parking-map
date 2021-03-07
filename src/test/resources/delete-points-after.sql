@@ -1,2 +1,3 @@
-delete from charging_points where id = 5;
-delete from charging_points where id = 6;
+delete
+from charging_points
+where user_id = (select u.id from users u where u.email = 'tim@gmail.com');

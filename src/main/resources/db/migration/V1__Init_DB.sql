@@ -27,7 +27,7 @@ create table charging_points
 
 create table polish_cities
 (
-    id        bigint   not null,
+    id        bigint not null,
     latitude  float4 not null,
     longitude float4 not null,
     name      varchar(255),
