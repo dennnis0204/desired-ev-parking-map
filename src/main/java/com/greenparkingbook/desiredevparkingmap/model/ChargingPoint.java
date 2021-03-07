@@ -8,15 +8,16 @@ import java.util.Objects;
 
 @Data
 @Entity
-@Table(name="charging_points")
+@Table(name = "charging_points")
 public class ChargingPoint {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "charging_points_id_seq")
+    @SequenceGenerator(name = "charging_points_id_seq", sequenceName = "charging_points_id_seq")
     private Long id;
 
     @NotNull(message = "typeOfCurrent is mandatory")
-    @Column(name="type_of_current")
+    @Column(name = "type_of_current")
     private String typeOfCurrent;
 
     @NotNull(message = "power is mandatory")
@@ -30,8 +31,8 @@ public class ChargingPoint {
     @Column(precision = 4, scale = 2)
     private Float longitude;
 
-    @ManyToOne(cascade= {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
-    @JoinColumn(name="user_id")
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
+    @JoinColumn(name = "user_id")
     private User user;
 
     @Override

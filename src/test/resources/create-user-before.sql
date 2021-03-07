@@ -1,3 +1,3 @@
 insert into users
-    (email, name, provider)
-values ('tim@gmail.com', 'tim', 'google');
+    (id, email, name, provider)
+values (3, 'tim@gmail.com', 'tim', 'google');

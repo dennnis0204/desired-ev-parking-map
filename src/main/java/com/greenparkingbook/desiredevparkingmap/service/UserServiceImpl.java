@@ -5,15 +5,12 @@ import com.greenparkingbook.desiredevparkingmap.exception.ChargingPointDoesNotEx
 import com.greenparkingbook.desiredevparkingmap.exception.UserMaxPointsNumberExceeded;
 import com.greenparkingbook.desiredevparkingmap.model.ChargingPoint;
 import com.greenparkingbook.desiredevparkingmap.model.User;
-import com.greenparkingbook.desiredevparkingmap.repository.ChargingPointRepository;
 import com.greenparkingbook.desiredevparkingmap.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityManager;
-import javax.transaction.Transactional;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import javax.validation.Validator;
@@ -28,11 +25,9 @@ public class UserServiceImpl implements UserService {
     private Integer userMaxPointsNumber;
 
     private final UserRepository userRepository;
-    private final ChargingPointRepository chargingPointRepository;
     private final UserMapper userMapper;
     private final UserPointsMapper userPointsMapper;
     private final ChargingPointMapper chargingPointMapper;
-    private final EntityManager entityManager;
     private final Validator validator;
 
     @Override
@@ -50,7 +45,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional
     public void addUserPoint(String email, ChargingPointDto chargingPointDto) {
         User user = getUserByEmail(email);
         ChargingPoint chargingPoint = mapValidatePoint(chargingPointDto);
@@ -58,7 +52,6 @@ public class UserServiceImpl implements UserService {
         if (user.getChargingPoints().size() < userMaxPointsNumber) {
             user.addChargingPoint(chargingPoint);
             userRepository.save(user);
-            entityManager.refresh(user);
         } else {
             throw new UserMaxPointsNumberExceeded(String.format("User already has %s charging points on the map!", userMaxPointsNumber));
         }
