@@ -1,14 +1,16 @@
-CREATE TABLE IF NOT EXISTS polish_cities
+drop table if exists polish_cities;
+
+create table polish_cities
 (
-    id        bigint NOT NULL AUTO_INCREMENT,
-    latitude  decimal(10, 2),
-    longitude decimal(10, 2),
+    id        bigint not null,
+    latitude  float4 not null,
+    longitude float4 not null,
     name      varchar(255),
-    PRIMARY KEY (id)
+    primary key (id)
 );
 
-INSERT INTO `polish_cities`
-VALUES (1, 52.88, 18.69, 'Aleksandrów Kujawski'),
+insert into polish_cities
+values (1, 52.88, 18.69, 'Aleksandrów Kujawski'),
        (2, 53.84, 22.98, 'Augustów'),
        (3, 54.25, 20.81, 'Bartoszyce'),
        (4, 51.36, 19.36, 'Bełchatów'),

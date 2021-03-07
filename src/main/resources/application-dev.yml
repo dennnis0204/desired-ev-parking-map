@@ -1,24 +1,18 @@
 spring:
 
   datasource:
-    url: jdbc:h2:mem:testdb;COLLATION=POLISH
-    collation: polish
-    driverClassName: org.h2.Driver
-    username: sa
-    password:
-    platform: h2
+    url: jdbc:postgresql://localhost/green_parking
+    username: postgres
+    password: password
 
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: validate
       naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
-      databaseplatform: org.hibernate.dialect.H2Dialect
+      databaseplatform: org.hibernate.dialect.PostgreSQLDialect
 
     show-sql: true
-
-  h2:
-    console:
-      enabled: true
+    generate-ddl: false
 
   security:
     oauth2:
@@ -37,11 +31,6 @@ spring:
             scope:
               - email
               - public_profile
-
-server:
-  servlet:
-    session:
-      persistent: false
 
 logging:
   level:
