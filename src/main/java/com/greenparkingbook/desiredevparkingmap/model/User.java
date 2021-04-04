@@ -64,8 +64,9 @@ public class User {
     }
 
     public Optional<ChargingPoint> findChargingPointById(Long id) {
+
         Optional<ChargingPoint> chargingPointOptional = chargingPoints.stream()
-                .filter(point -> point.getId() == id)
+                .filter(point -> point.getId().equals(id))
                 .findFirst();
         return chargingPointOptional;
     }

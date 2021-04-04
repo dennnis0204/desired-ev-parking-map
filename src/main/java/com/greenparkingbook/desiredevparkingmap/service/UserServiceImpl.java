@@ -89,6 +89,7 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with email : " + email));
     }
 
+
     private ChargingPoint mapValidatePoint(ChargingPointDto chargingPointDto) {
         ChargingPoint chargingPoint = chargingPointMapper.chargingPointDtoToChargingPoint(chargingPointDto);
         Set<ConstraintViolation<ChargingPoint>> constraintViolations = validator.validate(chargingPoint);
