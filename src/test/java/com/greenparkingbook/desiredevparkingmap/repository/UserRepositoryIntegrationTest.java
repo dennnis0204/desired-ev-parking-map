@@ -4,6 +4,7 @@ import com.greenparkingbook.desiredevparkingmap.model.AuthProvider;
 import com.greenparkingbook.desiredevparkingmap.model.User;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
@@ -13,6 +14,7 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 public class UserRepositoryIntegrationTest {
 
     @Autowired
@@ -22,7 +24,7 @@ public class UserRepositoryIntegrationTest {
     private UserRepository userRepository;
 
     @Test
-    public void whenFindByEmail_thenReturnUser() {
+    public void givenEmail_whenFindByEmail_thenReturnUser() {
         // given
         User john = new User();
         john.setName("Bob");

@@ -1,9 +1,5 @@
-drop table if exists charging_points;
-drop table if exists users;
-drop table if exists polish_cities;
-
-create sequence users_id_seq start 1 increment 50;
-create sequence charging_points_id_seq start 1 increment 50;
+create sequence users_id_seq start 1 increment 1;
+create sequence charging_points_id_seq start 1 increment 1;
 
 create table users
 (
@@ -20,8 +16,8 @@ create table users
 create table charging_points
 (
     id              int8         not null,
-    latitude        float4       not null,
-    longitude       float4       not null,
+    latitude        numeric       not null,
+    longitude       numeric       not null,
     power           varchar(255) not null,
     type_of_current varchar(255) not null,
     user_id         int8,

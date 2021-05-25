@@ -3,7 +3,9 @@ package com.greenparkingbook.desiredevparkingmap.model;
 import lombok.Data;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 import java.util.Objects;
 
 @Data
@@ -13,23 +15,23 @@ public class ChargingPoint {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "charging_points_id_seq")
-    @SequenceGenerator(name = "charging_points_id_seq", sequenceName = "charging_points_id_seq")
+    @SequenceGenerator(name = "charging_points_id_seq", sequenceName = "charging_points_id_seq", allocationSize = 1)
     private Long id;
 
-    @NotNull(message = "typeOfCurrent is mandatory")
+    @NotBlank(message = "typeOfCurrent is mandatory")
     @Column(name = "type_of_current")
     private String typeOfCurrent;
 
-    @NotNull(message = "power is mandatory")
+    @NotBlank(message = "power is mandatory")
     private String power;
 
     @NotNull(message = "latitude is mandatory")
     @Column(precision = 4, scale = 2)
-    private Float latitude;
+    private BigDecimal latitude;
 
     @NotNull(message = "longitude is mandatory")
     @Column(precision = 4, scale = 2)
-    private Float longitude;
+    private BigDecimal longitude;
 
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
     @JoinColumn(name = "user_id")

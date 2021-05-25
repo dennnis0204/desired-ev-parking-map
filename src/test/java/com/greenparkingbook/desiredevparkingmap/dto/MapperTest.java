@@ -11,6 +11,7 @@ import org.junit.jupiter.api.TestInstance;
 import org.mapstruct.factory.Mappers;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -18,7 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Slf4j
 @SpringBootTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class UserMapperTest {
+public class MapperTest {
 
     private UserMapper userMapper = Mappers.getMapper(UserMapper.class);
     private UserPointsMapper userPointsMapper = Mappers.getMapper(UserPointsMapper.class);
@@ -42,15 +43,15 @@ public class UserMapperTest {
         firstPoint.setId(1L);
         firstPoint.setPower("3-5 kW");
         firstPoint.setTypeOfCurrent("AC");
-        firstPoint.setLatitude(33.33F);
-        firstPoint.setLongitude(44.44F);
+        firstPoint.setLatitude(new BigDecimal("33.33"));
+        firstPoint.setLongitude(new BigDecimal("44.44"));
 
         secondPoint = new ChargingPoint();
         secondPoint.setId(2L);
         secondPoint.setTypeOfCurrent("DC");
         secondPoint.setPower("6-15 kW");
-        secondPoint.setLatitude(88.88F);
-        secondPoint.setLongitude(77.77F);
+        secondPoint.setLatitude(new BigDecimal("88.88"));
+        secondPoint.setLongitude(new BigDecimal("77.77"));
 
         user.setChargingPoints(List.of(firstPoint, secondPoint));
 
@@ -58,8 +59,8 @@ public class UserMapperTest {
         chargingPointDto.setId(1L);
         chargingPointDto.setPower("3-5 kW");
         chargingPointDto.setTypeOfCurrent("AC");
-        chargingPointDto.setLatitude(33.33F);
-        chargingPointDto.setLongitude(44.44F);
+        chargingPointDto.setLatitude(new BigDecimal("33.33"));
+        chargingPointDto.setLongitude(new BigDecimal("44.44"));
 
     }
 

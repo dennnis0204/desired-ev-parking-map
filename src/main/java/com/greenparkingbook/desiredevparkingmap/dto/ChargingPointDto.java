@@ -1,13 +1,32 @@
 package com.greenparkingbook.desiredevparkingmap.dto;
 
-import lombok.*;
+import lombok.Data;
+
+import javax.validation.constraints.*;
+import java.math.BigDecimal;
 
 @Data
 public class ChargingPointDto {
 
+    @NotNull
+    @Positive(message = "Point id must be positive")
     private Long id;
+
+    @NotBlank(message = "Station type of current must not be blank")
     private String typeOfCurrent;
+
+    @NotBlank(message = "Station power must not be blank")
     private String power;
-    private Float latitude;
-    private Float longitude;
+
+    @NotNull
+    @DecimalMin(value = "-90.00", message = "Min latitude value is -90.00")
+    @DecimalMax(value = "90.00", message = "Max latitude value is 90.00")
+    @Digits(integer = 2, fraction = 2, message = "Wrong latitude format")
+    private BigDecimal latitude;
+
+    @NotNull
+    @DecimalMin(value = "-90.00", message = "Min longitude value is -90.00")
+    @DecimalMax(value = "90.00", message = "Max longitude value is 90.00")
+    @Digits(integer = 2, fraction = 2, message = "Wrong longitude format")
+    private BigDecimal longitude;
 }
